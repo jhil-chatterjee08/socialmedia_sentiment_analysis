@@ -67,8 +67,7 @@ Copy code
 streamlit run app.py
 ```
 ## 🧪 Default Query
-The app uses the query:
-artificial intelligence
+The app uses the query: artificial intelligence
 You can also use the custom search bar to try:
 
 "mental health in college"
