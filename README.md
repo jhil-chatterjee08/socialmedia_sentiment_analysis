@@ -56,7 +56,6 @@ Copy code
 pip install -r requirements.txt
 4. Add Reddit API Credentials
 In src/config/reddit.py, fill in your details:
-
 python
 Copy code
 client_id = "YOUR_CLIENT_ID"
