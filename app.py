@@ -23,7 +23,13 @@ st.title("📊 Reddit Sentiment Analysis")
 
 # Sidebar
 st.sidebar.header("Navigation")
-options = st.sidebar.radio("Go to", ["📄 Dataset Preview", "📈 Visualizations", "☁️ Word Cloud", "🔍 Custom Search"], key="nav_radio")
+options = st.sidebar.radio("Go to", [
+    "📄 Dataset Preview", 
+    "📈 Visualizations", 
+    "☁️ Word Cloud", 
+    "🔍 Custom Search", 
+    "📂 Upload CSV"
+], key="nav_radio")
 
 df = load_data()
 
@@ -61,7 +67,7 @@ elif options == "🔍 Custom Search":
             scrape_reddit(query, limit, output_csv)
 
             # Analyze sentiment
-            analyze_sentiment(df, output_path="src/data/output_sentiment.csv")
+            analyze_sentiment(pd.read_csv(output_csv), output_path="src/data/output_sentiment.csv")
 
             # Reload data
             df = load_data()
@@ -69,6 +75,33 @@ elif options == "🔍 Custom Search":
             st.success(f"✅ Fetched and analyzed {limit} posts!")
             st.dataframe(df[['title', 'text', 'Sentiment']].head(100))
 
+# 5. Upload CSV for Sentiment Analysis
+elif options == "📂 Upload CSV":
+    st.subheader("Upload Your CSV for Sentiment Analysis")
+    uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
+
+    if uploaded_file is not None:
+        user_df = pd.read_csv(uploaded_file)
+
+        # Check for text column
+        if 'text' not in user_df.columns:
+            st.error("Your CSV must have a column named 'text'.")
+        else:
+            with st.spinner("Analyzing sentiment..."):
+                # Apply your sentiment model
+                user_df['Sentiment'] = user_df['text'].apply(get_sentiment)
+
+            st.success("✅ Sentiment analysis complete!")
+            st.dataframe(user_df.head(50))
+
+            # Download button
+            csv = user_df.to_csv(index=False).encode("utf-8")
+            st.download_button(
+                label="Download Predictions as CSV",
+                data=csv,
+                file_name="sentiment_results.csv",
+                mime="text/csv"
+            )
 
             
           

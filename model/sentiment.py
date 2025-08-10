@@ -8,8 +8,8 @@ sia = SentimentIntensityAnalyzer()
 def get_sentiment(text):
     score = sia.polarity_scores(text)['compound']
     if score >= 0.05:
-        return 'Positive 😊'
+        return 'Positive'
     elif score <= -0.05:
-        return 'Negative 😞'
+        return 'Negative'
     else:
-        return 'Neutral 😐'
+        return 'Neutral'
